@@ -10,6 +10,7 @@
  circumstances for any damages or loss whatsoever arising from the use
  or inability to use this file or items derived from it.
  ******************************************************************************/
+
 #define GL_GLEXT_PROTOTYPES
 #include <GL/gl.h>           
 #include <GL/glu.h>         
