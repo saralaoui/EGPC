@@ -1,7 +1,7 @@
 /*****************************************************************************
  File: TD5.cpp
  
- Sarah FDILI ALAOUI, Université Paris 11
+ Sarah FDILI ALAOUI, UniversitÔøΩ Paris 11
  
  Copyright (C) 2010 University Paris 11 
  This file is provided without support, instruction, or implied
@@ -10,6 +10,7 @@
  circumstances for any damages or loss whatsoever arising from the use
  or inability to use this file or items derived from it.
  ******************************************************************************/
+
 
 #define GL_GLEXT_PROTOTYPES
 #include <GL/gl.h>           
@@ -47,7 +48,7 @@
 #define My_Particles 2
 #define My_Points 3
 
-//Pour la liaison OSC, définitio du socket et du buffer
+//Pour la liaison OSC, dÔøΩfinitio du socket et du buffer
 UdpTransmitSocket transmitSocket( IpEndpointName( ADDRESS, OUT_PORT ) );
 char buffer[OUTPUT_BUFFER_SIZE];
 
@@ -88,17 +89,17 @@ int        newTexturePosition = POSITION_1_TEXTURE;
 // default material: white
 GLfloat white_transparent[4] = {1.0,1.0,1.0,0.0};
 
-//Param∂tres à gerer par le biais d'un controle gestuel
+//ParamÔøΩtres ÔøΩ gerer par le biais d'un controle gestuel
 
-//raideur suppl⁄mentaire
+//raideur supplÔøΩmentaire
 float Kplus = 0;
-//longueure initiale suppl⁄mentaire
+//longueure initiale supplÔøΩmentaire
 float Linit = 0;
-//amortissement total suppl⁄mentaire
+//amortissement total supplÔøΩmentaire
 float Amort = 0;
-//constante de viscosit⁄
+//constante de viscositÔøΩ
 float mu = 0;
-//masse uniforme suppl⁄mentaire
+//masse uniforme supplÔøΩmentaire
 float MassePlus = 1;
 
 //nombre de masses et de ressorts choisis
@@ -130,7 +131,7 @@ bool checkFramebufferStatus();
 void cgErrorCallback(void);
 
 ///////////////////////////////////////
-// données Cg
+// donnÔøΩes Cg
 
 // contexte GC
 CGcontext cgContext;
@@ -154,7 +155,7 @@ CGprogram cgPositionsFragmentProgram;     // TD5-positions-FS.cg
 CGprogram cgDessinVertexProgram;          // TD5-dessin-VP.cg
 CGprogram cgDessinFragmentProgram;        // TD5-dessin-FS.cg
 
-// paramétres Cg pour le programme de calcul des forces
+// paramÔøΩtres Cg pour le programme de calcul des forces
 // pass 1: forces
 CGparameter texture_FragmentProgram;                       // texture
 CGparameter edge_Index_K_L0_ForceFragmentProgram;          // edge_Index_K_L0
@@ -169,16 +170,16 @@ CGparameter edge_Index_K_L0_RightForcesVertexShaderParam;  // edge_Index_K_L0
 CGparameter edge_Force_LeftFragmentShaderParam;            // edge_force
 CGparameter edge_Force_RightFragmentShaderParam;           // edge_force
 // pass 4: positions
-// paramétres Cg pour le programme de calcul des positions
+// paramÔøΩtres Cg pour le programme de calcul des positions
 CGparameter mass_PrevPos_PositionsFragmentShaderParam;   // prev_mass_positions
 CGparameter mass_CurrPos_PositionsFragmentShaderParam;   // curr_mass_positions
 CGparameter mass_Forces_PositionsFragmentShaderParam;      // edge_forces
 CGparameter scale_PositionsFragmentShaderParam;            // scale
-CGparameter muFragmentShaderParam;							// constante de viscosit⁄
+CGparameter muFragmentShaderParam;							// constante de viscositÔøΩ
 CGparameter MassePlusFragmentShaderParam;					// masse supplementaire  pour les masses
 
 // pass 5: dessin
-// paramétres Cg pour le programme de dessin
+// paramÔøΩtres Cg pour le programme de dessin
 CGparameter largeurParticlesVertexShaderParam;             // largeur
 CGparameter profondeurParticlesVertexShaderParam;          // profondeur
 CGparameter mass_Positions_DessinVertexShaderParam;        // mass_positionsV
@@ -229,17 +230,17 @@ int main(int argc, char **argv)  {
 	}	
 	
 	
-	// initialisation  des paramètres de GLUT en fonction
+	// initialisation  des paramÔøΩtres de GLUT en fonction
 	// des arguments sur la ligne de commande
 	glutInit(&argc, argv);
 	glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
 	
-	// définition et création de la fenêtre graphique
+	// dÔøΩfinition et crÔøΩation de la fenÔøΩtre graphique
 	glutInitWindowSize(width, height);
 	glutInitWindowPosition(0, 0);
 	glutCreateWindow("breathing");
 	
-	// initialisation de OpenGL de Cg et de la scène
+	// initialisation de OpenGL de Cg et de la scÔøΩne
 	initGL();  
 	initCg();  
 	init_scene();
@@ -248,26 +249,26 @@ int main(int argc, char **argv)  {
 	 	pthread_t listener_thread;
 	 	int thread_id;
 	 	char *nothing;
-	 	// cr⁄e un thread qui execute en parall∂le la fonction ConnectListener ci-dessous avec des attributs par d⁄faut
+	 	// crÔøΩe un thread qui execute en parallÔøΩle la fonction ConnectListener ci-dessous avec des attributs par dÔøΩfaut
 	 	thread_id = pthread_create( &listener_thread, NULL, ConnectListener , (void*) nothing);
 	
 	
 	
-	// choix des procédures de callback pour 
-	// le tracé graphique
+	// choix des procÔøΩdures de callback pour 
+	// le tracÔøΩ graphique
 	glutDisplayFunc(&window_display);
-	// le redimensionnement de la fenêtre
+	// le redimensionnement de la fenÔøΩtre
 	glutReshapeFunc(&window_reshape);
-	// la gestion des événements clavier
+	// la gestion des ÔøΩvÔøΩnements clavier
 	glutKeyboardFunc(&window_key);
 	// la gestion des clicks souris
 	glutMouseFunc(&window_mouseFunc);
-	// la gestion des déplacement souris
+	// la gestion des dÔøΩplacement souris
 	glutMotionFunc(&window_motionFunc);
-	// fonction appelée régulièrement entre deux gestions d´événements
+	// fonction appelÔøΩe rÔøΩguliÔøΩrement entre deux gestions dÔøΩÔøΩvÔøΩnements
 	glutTimerFunc(0,&window_timer,FrameNo);
 	
-	// la boucle prinicipale de gestion des événements utilisateur
+	// la boucle prinicipale de gestion des ÔøΩvÔøΩnements utilisateur
 	glutMainLoop();  
 	
 	return 1;
@@ -275,9 +276,9 @@ int main(int argc, char **argv)  {
 
 // fonction OSC 
  void *ConnectListener(void *message) {
- 	//d⁄fini la m⁄thode de traitement des donn⁄es 
+ 	//dÔøΩfini la mÔøΩthode de traitement des donnÔøΩes 
  	SarahPacketListener listener;
- 	//d⁄fini la communication UDP et permet de recevoir les pacquets
+ 	//dÔøΩfini la communication UDP et permet de recevoir les pacquets
  	UdpListeningReceiveSocket s(
  								IpEndpointName( IpEndpointName::ANY_ADDRESS, IN_PORT ),
  								&listener );
@@ -295,10 +296,10 @@ int main(int argc, char **argv)  {
 GLvoid initGL()  {
 	glClearColor(1,1,1,1);        
 	
-	// Définit un modèle d´ombrage
+	// DÔøΩfinit un modÔøΩle dÔøΩombrage
 	glShadeModel(GL_SMOOTH);
 	
-	// Z Buffer pour la suppression des parties cachées
+	// Z Buffer pour la suppression des parties cachÔøΩes
 	glEnable(GL_DEPTH_TEST);
 	
 }
@@ -313,9 +314,9 @@ GLvoid initCg()  {
 	// register the error callback once the context has been created
 	cgSetErrorCallback(cgErrorCallback);
 	
-	// création d'un contexte pour les programmes Cg
+	// crÔøΩation d'un contexte pour les programmes Cg
 	cgContext = cgCreateContext();
-	// + vérification
+	// + vÔøΩrification
 	if (cgContext == NULL) {
 		printf( "Erreur de chargement du contexte Cg\n" ); exit( 0 );
 	}
@@ -326,7 +327,7 @@ GLvoid initCg()  {
 	// le dernier profil pour les vertex
 	cgVertexProfile = cgGLGetLatestProfile(CG_GL_VERTEX);
 	cgVertexProfile = cgGLGetLatestProfile(CG_GL_VERTEX);
-	// + vérification
+	// + vÔøΩrification
 	if (cgVertexProfile == CG_PROFILE_UNKNOWN) {
 		printf( "Profil de vertex invalide\n" ); exit( 0 );
 	}
@@ -335,7 +336,7 @@ GLvoid initCg()  {
 	// le dernier profil pour les fragments
 	cgFragmentProfile = cgGLGetLatestProfile(CG_GL_FRAGMENT);
 	cgFragmentProfile = cgGetProfile("fp40");
-	// + vérification
+	// + vÔøΩrification
 	if (cgFragmentProfile == CG_PROFILE_UNKNOWN) {
 		printf( "Profil de fragment invalide\n" ); exit( 0 );
 	}
@@ -345,7 +346,7 @@ GLvoid initCg()  {
 	// pass 1: forces
 	// compilation des programmmes de vertex et de fragment de calcul des forces
 	
-	// compile le programme de vertex à partir d'un fichier
+	// compile le programme de vertex ÔøΩ partir d'un fichier
 	strcpy( filename , "src/TD5-quad2-VP.cg" );
 	printf( "Chargement du programme de vertex %s\n" , filename );
 	cgQuadVertexProgram 
@@ -355,20 +356,20 @@ GLvoid initCg()  {
 							  // programme objet
 							  filename,         // le nom du fichier
 							  cgVertexProfile,  // le profil
-							  "main",           // le programme d'entrée
-							  NULL );           // autres paramètres
-	// + vérification
+							  "main",           // le programme d'entrÔøΩe
+							  NULL );           // autres paramÔøΩtres
+	// + vÔøΩrification
 	if( cgQuadVertexProgram == NULL ) {
 		// Cg nous renvoie un pointeur vers une erreur
 		CGerror Error = cgGetError();
 		
-		// dont on affiche la chaine - généralement peu informative...
+		// dont on affiche la chaine - gÔøΩnÔøΩralement peu informative...
 		printf( "Chargement incorrect du programme de vertex de calcul forces %s (%s)\n" ,
 			   filename , cgGetErrorString(Error) ); 
 		exit( 0 );
 	}
 	
-	// compile le programme de fragment à partir d'un fichier
+	// compile le programme de fragment ÔøΩ partir d'un fichier
 	strcpy( filename , "src/TD5-force2-FS.cg" );
 	printf( "Chargement du programme de fragment %s\n" , filename );
 	cgForceFragmentProgram 
@@ -378,14 +379,14 @@ GLvoid initCg()  {
 							  // programme objet
 							  filename,         // le nom du fichier
 							  cgFragmentProfile,  // le profil
-							  "main",           // le programme d'entrée
-							  NULL );           // autres paramètres
-	// + vérification
+							  "main",           // le programme d'entrÔøΩe
+							  NULL );           // autres paramÔøΩtres
+	// + vÔøΩrification
 	if( cgForceFragmentProgram == NULL ) {
 		// Cg nous renvoie un pointeur vers une erreur
 		CGerror Error = cgGetError();
 		
-		// dont on affiche la chaine - généralement peu informative...
+		// dont on affiche la chaine - gÔøΩnÔøΩralement peu informative...
 		printf( "Chargement incorrect du programme de fragment de calcul de forces %s (%s)\n" ,
 			   filename , cgGetErrorString(Error) ); 
 		exit( 0 );
@@ -395,7 +396,7 @@ GLvoid initCg()  {
 	// pass 2-3 : cumul des forces
 	// compilation des programmmes de vertex et de fragment de cumul des forces
 	
-	// compile le programme de vertex à partir d'un fichier
+	// compile le programme de vertex ÔøΩ partir d'un fichier
 	strcpy( filename , "src/TD5-forces-gauche2-VP.cg" );
 	printf( "Chargement du programme de vertex %s\n" , filename );
 	cgVertexLeftForcesProgram 
@@ -405,8 +406,8 @@ GLvoid initCg()  {
 							  // programme objet
 							  filename,         // le nom du fichier
 							  cgVertexProfile,  // le profil
-							  "main",           // le programme d'entrée
-							  NULL );           // autres paramètres
+							  "main",           // le programme d'entrÔøΩe
+							  NULL );           // autres paramÔøΩtres
 	strcpy( filename2 , "src/TD5-forces-droite2-VP.cg" );
 	printf( "Chargement du programme de vertex %s\n" , filename2 );
 	cgVertexRightForcesProgram 
@@ -416,21 +417,21 @@ GLvoid initCg()  {
 							  // programme objet
 							  filename2,         // le nom du fichier
 							  cgVertexProfile,  // le profil
-							  "main",           // le programme d'entrée
-							  NULL );           // autres paramètres
-	// + vérification
+							  "main",           // le programme d'entrÔøΩe
+							  NULL );           // autres paramÔøΩtres
+	// + vÔøΩrification
 	if( cgVertexLeftForcesProgram == NULL 
 	   || cgVertexRightForcesProgram == NULL ) {
 		// Cg nous renvoie un pointeur vers une erreur
 		CGerror Error = cgGetError();
 		
-		// dont on affiche la chaine - généralement peu informative...
+		// dont on affiche la chaine - gÔøΩnÔøΩralement peu informative...
 		printf( "Chargement incorrect du programme de vertex de cumul de forces %s ou %s (%s)\n" ,
 			   filename , filename2 , cgGetErrorString(Error) ); 
 		exit( 0 );
 	}
 	
-	// compile le programme de fragment à partir d'un fichier
+	// compile le programme de fragment ÔøΩ partir d'un fichier
 	strcpy( filename , "src/TD5-cumul-force-gauche2-FS.cg" );
 	printf( "Chargement du programme de fragment %s\n" , filename );
 	cgFragmentLeftCumulForcesProgram 
@@ -440,8 +441,8 @@ GLvoid initCg()  {
 							  // programme objet
 							  filename,         // le nom du fichier
 							  cgFragmentProfile,  // le profil
-							  "main",           // le programme d'entrée
-							  NULL );           // autres paramètres
+							  "main",           // le programme d'entrÔøΩe
+							  NULL );           // autres paramÔøΩtres
 	strcpy( filename2 , "src/TD5-cumul-force-droite2-FS.cg" );
 	printf( "Chargement du programme de fragment %s\n" , filename2 );
 	cgFragmentRightCumulForcesProgram 
@@ -451,15 +452,15 @@ GLvoid initCg()  {
 							  // programme objet
 							  filename2,         // le nom du fichier
 							  cgFragmentProfile,  // le profil
-							  "main",           // le programme d'entrée
-							  NULL );           // autres paramètres
-	// + vérification
+							  "main",           // le programme d'entrÔøΩe
+							  NULL );           // autres paramÔøΩtres
+	// + vÔøΩrification
 	if( cgFragmentLeftCumulForcesProgram == NULL 
 	   || cgFragmentRightCumulForcesProgram == NULL ) {
 		// Cg nous renvoie un pointeur vers une erreur
 		CGerror Error = cgGetError();
 		
-		// dont on affiche la chaine - généralement peu informative...
+		// dont on affiche la chaine - gÔøΩnÔøΩralement peu informative...
 		printf( "Chargement incorrect du programme de fragment de cumul de forces gauche %s ou droite %s (%s)\n" , filename , filename2 , cgGetErrorString(Error) ); 
 		exit( 0 );
 	}
@@ -468,9 +469,9 @@ GLvoid initCg()  {
 	// pass 4: positions
 	// compilation des progs de vertex et de fragment de calcul des positions
 	
-	// même programme de vertex que le calcul des forces
+	// mÔøΩme programme de vertex que le calcul des forces
 	
-	// compile le programme de fragment à partir d'un fichier
+	// compile le programme de fragment ÔøΩ partir d'un fichier
 	strcpy( filename , "src/TD5-positions2-FS.cg" );
 	printf( "Chargement du programme de fragment %s\n" , filename );
 	cgPositionsFragmentProgram 
@@ -480,14 +481,14 @@ GLvoid initCg()  {
 							  // programme objet
 							  filename,         // le nom du fichier
 							  cgFragmentProfile,  // le profil
-							  "main",           // le programme d'entrée
-							  NULL );           // autres paramètres
-	// + vérification
+							  "main",           // le programme d'entrÔøΩe
+							  NULL );           // autres paramÔøΩtres
+	// + vÔøΩrification
 	if( cgPositionsFragmentProgram == NULL ) {
 		// Cg nous renvoie un pointeur vers une erreur
 		CGerror Error = cgGetError();
 		
-		// dont on affiche la chaine - généralement peu informative...
+		// dont on affiche la chaine - gÔøΩnÔøΩralement peu informative...
 		printf( "Chargement incorrect du programme de fragment %s (%s)\n" ,
 			   filename , cgGetErrorString(Error) ); 
 		exit( 0 );
@@ -497,7 +498,7 @@ GLvoid initCg()  {
 	// pass 5: dessin
 	// compilation des programmmes de vertex et de fragment de dessin
 	
-	// compile le programme de vertex à partir d'un fichier
+	// compile le programme de vertex ÔøΩ partir d'un fichier
 	strcpy( filename , "src/TD5-dessin2-VP.cg" );
 	printf( "Chargement du programme de vertex %s\n" , filename );
 	cgDessinVertexProgram 
@@ -507,20 +508,20 @@ GLvoid initCg()  {
 							  // programme objet
 							  filename,         // le nom du fichier
 							  cgVertexProfile,  // le profil
-							  "main",           // le programme d'entrée
-							  NULL );           // autres paramètres
-	// + vérification
+							  "main",           // le programme d'entrÔøΩe
+							  NULL );           // autres paramÔøΩtres
+	// + vÔøΩrification
 	if( cgDessinVertexProgram == NULL ) {
 		// Cg nous renvoie un pointeur vers une erreur
 		CGerror Error = cgGetError();
 		
-		// dont on affiche la chaine - généralement peu informative...
+		// dont on affiche la chaine - gÔøΩnÔøΩralement peu informative...
 		printf( "Chargement incorrect du programme de vertex de dessin %s (%s)\n" ,
 			   filename , cgGetErrorString(Error) ); 
 		exit( 0 );
 	}
 	
-	// compile le programme de fragment à partir d'un fichier
+	// compile le programme de fragment ÔøΩ partir d'un fichier
 	strcpy( filename , "src/TD5-dessin2-FS.cg" );
 	printf( "Chargement du programme de fragment %s\n" , filename );
 	cgDessinFragmentProgram 
@@ -530,14 +531,14 @@ GLvoid initCg()  {
 							  // programme objet
 							  filename,         // le nom du fichier
 							  cgFragmentProfile,  // le profil
-							  "main",           // le programme d'entrée
-							  NULL );           // autres paramètres
-	// + vérification
+							  "main",           // le programme d'entrÔøΩe
+							  NULL );           // autres paramÔøΩtres
+	// + vÔøΩrification
 	if( cgDessinFragmentProgram == NULL ) {
 		// Cg nous renvoie un pointeur vers une erreur
 		CGerror Error = cgGetError();
 		
-		// dont on affiche la chaine - généralement peu informative...
+		// dont on affiche la chaine - gÔøΩnÔøΩralement peu informative...
 		printf( "Chargement incorrect du programme de fragment %s (%s)\n" ,
 			   filename , cgGetErrorString(Error) ); 
 		exit( 0 );
@@ -553,7 +554,7 @@ GLvoid initCg()  {
 	// chargement du programme de fragment de calcul des forces
 	cgGLLoadProgram(cgForceFragmentProgram);
 	
-	//  et liens avec ses paramètres
+	//  et liens avec ses paramÔøΩtres
 	edge_Index_K_L0_ForceFragmentProgram 
 	= cgGetNamedParameter(cgForceFragmentProgram, "edge_Index_K_L0");
 	mass_Position_ForceFragmentProgram
@@ -571,7 +572,7 @@ GLvoid initCg()  {
 		|| !KplusFragmentShaderParam
 		|| !LinitFragmentShaderParam
 		|| !AmortFragmentShaderParam) {
-		printf("Erreur dans le chargement des paramètres du programme de fragment de calcul des forces\n");
+		printf("Erreur dans le chargement des paramÔøΩtres du programme de fragment de calcul des forces\n");
 		exit(0);
 	}
 	
@@ -582,60 +583,60 @@ GLvoid initCg()  {
 	// chargement du programme de vertex de cumul des forces gauche
 	cgGLLoadProgram(cgVertexLeftForcesProgram);
 	
-	//  et liens avec ses paramètres
+	//  et liens avec ses paramÔøΩtres
 	edge_Index_K_L0_LeftForcesVertexShaderParam 
 	= cgGetNamedParameter(cgVertexLeftForcesProgram, "edge_Index_K_L0");
 	
 	if (!edge_Index_K_L0_LeftForcesVertexShaderParam ) {
-		printf("Erreur dans le chargement des paramètres du programme de vertex de forces gauche\n");
+		printf("Erreur dans le chargement des paramÔøΩtres du programme de vertex de forces gauche\n");
 		exit(0);
 	}
 	
 	// chargement du programme de vertex de cumul des forces droite
 	cgGLLoadProgram(cgVertexRightForcesProgram);
 	
-	//  et liens avec ses paramètres
+	//  et liens avec ses paramÔøΩtres
 	edge_Index_K_L0_RightForcesVertexShaderParam 
 	= cgGetNamedParameter(cgVertexRightForcesProgram, "edge_Index_K_L0");
 	
 	if (!edge_Index_K_L0_RightForcesVertexShaderParam  ) {
-		printf("Erreur dans le chargement des paramètres du programme de vertex de forces droite\n");
+		printf("Erreur dans le chargement des paramÔøΩtres du programme de vertex de forces droite\n");
 		exit(0);
 	}
 	
 	// chargement du programme de fragment de cumul des forces gauche
 	cgGLLoadProgram(cgFragmentLeftCumulForcesProgram);
 	
-	//  et liens avec ses paramètres
+	//  et liens avec ses paramÔøΩtres
 	edge_Force_LeftFragmentShaderParam
 	= cgGetNamedParameter(cgFragmentLeftCumulForcesProgram, "edge_forces");
 	
 	if (!edge_Force_LeftFragmentShaderParam ) {
-		printf("Erreur dans le chargement des paramètres du programme de fragment de forces gauche\n");
+		printf("Erreur dans le chargement des paramÔøΩtres du programme de fragment de forces gauche\n");
 		exit(0);
 	}
 	
 	// chargement du programme de fragment de cumul des forces droite
 	cgGLLoadProgram(cgFragmentRightCumulForcesProgram);
 	
-	//  et liens avec ses paramètres
+	//  et liens avec ses paramÔøΩtres
 	edge_Force_RightFragmentShaderParam
 	= cgGetNamedParameter(cgFragmentRightCumulForcesProgram, "edge_forces");
 	
 	if (!edge_Force_RightFragmentShaderParam ) {
-		printf("Erreur dans le chargement des paramètres du programme de fragment de forces droite\n");
+		printf("Erreur dans le chargement des paramÔøΩtres du programme de fragment de forces droite\n");
 		exit(0);
 	}
 	/////////////////////////////////////////////////
 	// pass 4: positions
 	// chargement du programmmes de fragment de calcul des positions
 	
-	// même programme de vertex que les forces
+	// mÔøΩme programme de vertex que les forces
 	
 	// chargement du shader de fragment positions gauche
 	cgGLLoadProgram(cgPositionsFragmentProgram);
 	
-	//  et liens avec ses paramètres
+	//  et liens avec ses paramÔøΩtres
 	mass_Forces_PositionsFragmentShaderParam 
 	= cgGetNamedParameter(cgPositionsFragmentProgram, "edge_forces");
 	mass_PrevPos_PositionsFragmentShaderParam
@@ -654,7 +655,7 @@ GLvoid initCg()  {
 		|| !mass_CurrPos_PositionsFragmentShaderParam
 		|| !MassePlusFragmentShaderParam
 		|| !muFragmentShaderParam) {
-		printf("Erreur dans le chargement des paramètres du programme de fragment de positions\n");
+		printf("Erreur dans le chargement des paramÔøΩtres du programme de fragment de positions\n");
 		exit(0);
 	}
 	
@@ -665,7 +666,7 @@ GLvoid initCg()  {
 	// chargement du programme de vertex
 	cgGLLoadProgram(cgDessinVertexProgram);
 	
-	//  et liens avec ses paramètres
+	//  et liens avec ses paramÔøΩtres
 	largeurParticlesVertexShaderParam 
 	= cgGetNamedParameter(cgDessinVertexProgram, "largeur"); 
 	profondeurParticlesVertexShaderParam 
@@ -676,24 +677,24 @@ GLvoid initCg()  {
 	if (!largeurParticlesVertexShaderParam 
 		|| !profondeurParticlesVertexShaderParam 
 		|| !mass_Positions_DessinVertexShaderParam ) {
-		printf("Erreur dans le chargement des paramètres du programme de vertex de dessin\n");
+		printf("Erreur dans le chargement des paramÔøΩtres du programme de vertex de dessin\n");
 		exit(0);
 	}
 	
 	// chargement du shader de fragment dessin gauche
 	cgGLLoadProgram(cgDessinFragmentProgram);
 	
-	//  et liens avec ses paramètres
+	//  et liens avec ses paramÔøΩtres
 	decal_DessinFragmentShaderParam 
 	= cgGetNamedParameter(cgDessinFragmentProgram, "decal_particules");
 	if ( !decal_DessinFragmentShaderParam ) {
-		printf("Erreur dans le chargement des paramètres du programme de fragment de dessin\n");
+		printf("Erreur dans le chargement des paramÔøΩtres du programme de fragment de dessin\n");
 		exit(0);
 	}
 }
 
 ///////////////////////////////////////
-// CHARGEMENT DES DONNÉES DANS LA GPU: display lists et textures
+// CHARGEMENT DES DONNÔøΩES DANS LA GPU: display lists et textures
 
 void init_scene() {
 	//////////////////////////////////////////////////////
@@ -727,7 +728,7 @@ void init_scene() {
 ///////////////////////////////////////
 // FONCTIONS DE CALL-BACK DE GLUT
 
-// fonction de call-back appelée régulièrement
+// fonction de call-back appelÔøΩe rÔøΩguliÔøΩrement
 
 void window_timer( int step ) 
 {
@@ -743,16 +744,16 @@ void window_timer( int step )
 	}
 }
 
-// fonction de call-back de glut pour l´affichage dans la fenêtre
+// fonction de call-back de glut pour lÔøΩaffichage dans la fenÔøΩtre
 
 GLvoid window_display() {
 	render_scene();
 	
-	// trace la scène grapnique qui vient juste d'être définie
+	// trace la scÔøΩne grapnique qui vient juste d'ÔøΩtre dÔøΩfinie
 	glFlush();
 }
 
-// fonction de call-back de glut pour le redimensionnement de la fenêtre
+// fonction de call-back de glut pour le redimensionnement de la fenÔøΩtre
 
 GLvoid window_reshape( GLsizei newWidth, GLsizei newHeight ) {  
 	width = newWidth;
@@ -763,7 +764,7 @@ GLvoid window_reshape( GLsizei newWidth, GLsizei newHeight ) {
 	glViewport(0, 0, 512, 512);
 }
 
-// fonction de call-back de glut pour la gestion des événements clavier
+// fonction de call-back de glut pour la gestion des ÔøΩvÔøΩnements clavier
 
 GLvoid window_key(unsigned char key, int x, int y)  {  
 	switch (key) {    
@@ -771,7 +772,7 @@ GLvoid window_key(unsigned char key, int x, int y)  {
 			exit(1);                    
 			break; 
 		default:
-			printf ("La touche %d n´est pas active.\n", key);
+			printf ("La touche %d nÔøΩest pas active.\n", key);
 			break;
 	}     
 }
@@ -785,7 +786,7 @@ GLvoid window_mouseFunc(int button, int state, int x, int y) {
 	}
 }
 
-// fonction de call-back de glut de gestion des déplacement de la souris
+// fonction de call-back de glut de gestion des dÔøΩplacement de la souris
 
 GLvoid window_motionFunc(int x, int y) {
 	angle_x += y - mouse_pos_y;
@@ -800,9 +801,9 @@ GLvoid window_motionFunc(int x, int y) {
 
 // compilation de la display list des quads
 // de rendu auxiliaire pour une texture
-// pour une texture RECT (coordonnées de texture entre 
+// pour une texture RECT (coordonnÔøΩes de texture entre 
 // 0 et width) dans le FS
-// et via la normale pour une texture 2D (coordonnées 
+// et via la normale pour une texture 2D (coordonnÔøΩes 
 // de texture entre 0 et 1) dans le VP
 void MakeQuadRECT2D( void ) {
 	glNewList(My_QuadRECT2D, GL_COMPILE);
@@ -894,16 +895,16 @@ void MakeParticles( void ) {
 // compilation de la display list des points pour 
 
 void MakePoints( void ) {
-	// 1 point correspond à une masse au bout d'une arête
-	// il est rendu à la position dans la texture de force
-	// (donc aux coordonnées de texture d'une masse dans 
-	// une texture de données de masses)
+	// 1 point correspond ÔøΩ une masse au bout d'une arÔøΩte
+	// il est rendu ÔøΩ la position dans la texture de force
+	// (donc aux coordonnÔøΩes de texture d'une masse dans 
+	// une texture de donnÔøΩes de masses)
 	glNewList(My_Points, GL_COMPILE);
 	glPointSize( 1.0 );
 	glDisable( GL_POINT_SMOOTH );
 	// chaque arete est rendue deux fois: une pour la masse
 	// de gauche, une pour la masse de droite
-	// les masses sont positionnées au bon endroit du frame buffer
+	// les masses sont positionnÔøΩes au bon endroit du frame buffer
 	// par le programme de vertex de gauche ou de droite selon
 	// la passe 2 ou 3
 	// on passe l'indice de la masse par la position
@@ -926,9 +927,9 @@ void CreateTexture( int textureId , int sizeX , int sizeY ) {
 		case POSITION_1_TEXTURE:
 		{
 			/////////////////////////////////////////////////////////////////////
-			// texture qui sert à stocker les informations sur les aretes
+			// texture qui sert ÔøΩ stocker les informations sur les aretes
 			// (indices des masses, k, l0
-			// utilisée en shader de vertex et de fragment
+			// utilisÔøΩe en shader de vertex et de fragment
 			// doit donc permettre le vertex texture fetch
 			// donc GL_TEXTURE_2D et format GL_RGBA_FLOAT32_ATI
 			dataFloatMasses = new GLfloat[ sizeX * sizeY * 4 ];
@@ -984,17 +985,17 @@ void CreateTexture( int textureId , int sizeX , int sizeY ) {
 				/////////////////////////////////////////////////////////////////////
 				// textures des positions 
 				// textures des positions avec un ping pong entre trois
-				// cibles d'écriture pour le FBO: la position précédente, 
-				// la position courante et la position antérieure. 
+				// cibles d'ÔøΩcriture pour le FBO: la position prÔøΩcÔøΩdente, 
+				// la position courante et la position antÔøΩrieure. 
 				// On a besoin de ces trois valeurs pour
-				// calculer le déplacement dans le schéma d'intégration de Verlet
+				// calculer le dÔøΩplacement dans le schÔøΩma d'intÔøΩgration de Verlet
 				// VTF (vertex texture fetch) donc format GL_RGBA_FLOAT32_ATI
-				// attachée à un FBO 
-				// initialisée par les valeurs stockées dans dataFloat
+				// attachÔøΩe ÔøΩ un FBO 
+				// initialisÔøΩe par les valeurs stockÔøΩes dans dataFloat
 				glTexImage2D( GL_TEXTURE_2D , 0, GL_RGBA_FLOAT32_ATI , 
 							 sizeX, sizeY, 
 							 // dataFloat est NULL pour POSITION_3_TEXTURE
-							 // qui n'a pas besoin d'etre initialisée
+							 // qui n'a pas besoin d'etre initialisÔøΩe
 							 0, GL_RGBA, GL_FLOAT, (const void *)dataFloatMasses );
 				
 				glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, 
@@ -1022,8 +1023,8 @@ void CreateTexture( int textureId , int sizeX , int sizeY ) {
 			glBindTexture(GL_TEXTURE_RECTANGLE_ARB, g_Texture[textureId]);
 			
 			/////////////////////////////////////////////////////////////////////
-			// texture qui sert à stocker les forces avant de les cumuler
-			// attachée à un FBO et sans initialisation nécessaire
+			// texture qui sert ÔøΩ stocker les forces avant de les cumuler
+			// attachÔøΩe ÔøΩ un FBO et sans initialisation nÔøΩcessaire
 			glTexImage2D(  GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA32F_ARB , 
 						 sizeX, sizeY, 0, GL_RGBA, GL_FLOAT, 0 );
 			glTexParameteri( GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, 
@@ -1046,11 +1047,11 @@ void CreateTexture( int textureId , int sizeX , int sizeY ) {
 			glBindTexture(GL_TEXTURE_RECTANGLE_ARB, g_Texture[textureId]);
 			
 			/////////////////////////////////////////////////////////////////////
-			// texture qui sert à cumuler les forces 
+			// texture qui sert ÔøΩ cumuler les forces 
 			// comme le cumul se fait par blending accumulatif,
-			// la précision doit être 16f (le blending sur les textures 
-			// 32f clampe les valeurs à 0..1)
-			// attachée à un FBO et sans initialisation nécessaire
+			// la prÔøΩcision doit ÔøΩtre 16f (le blending sur les textures 
+			// 32f clampe les valeurs ÔøΩ 0..1)
+			// attachÔøΩe ÔøΩ un FBO et sans initialisation nÔøΩcessaire
 			glTexImage2D( GL_TEXTURE_RECTANGLE_ARB , 0, GL_RGBA16F_ARB , 
 						 sizeX, sizeY, 0, GL_RGBA, GL_FLOAT, 0 );
 			glTexParameteri( GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, 
@@ -1069,13 +1070,13 @@ void CreateTexture( int textureId , int sizeX , int sizeY ) {
 			printf( "Texture No %d ID (%d)\n" , textureId , g_Texture[textureId] );
 			
 			glEnable( GL_TEXTURE_2D );
-			// Lie la texture avec une cible carrée
+			// Lie la texture avec une cible carrÔøΩe
 			glBindTexture(GL_TEXTURE_2D, g_Texture[textureId]);
 			
 			/////////////////////////////////////////////////////////////////////
-			// texture qui sert à stocker les informations sur les aretes
+			// texture qui sert ÔøΩ stocker les informations sur les aretes
 			// (indices des masses, k, l0
-			// utilisée en shader de vertex et de fragment
+			// utilisÔøΩe en shader de vertex et de fragment
 			// doit donc permettre le vertex texture fetch
 			// donc format GL_RGBA_FLOAT32_ATI
 			dataFloatEdge = new GLfloat[ sizeX * sizeY * 4 ];
@@ -1088,7 +1089,7 @@ void CreateTexture( int textureId , int sizeX , int sizeY ) {
 			// mass1 index, mass2 index, rest length, elasticity
 			// edge #1-4
 			
-			//les 4 première masses sont en carré
+			//les 4 premiÔøΩre masses sont en carrÔøΩ
 				
 				for( int i = 0 ; i < NB_MASSES-1 ; i++ ) {
 					dataFloatEdge[ i * 4 ]     = (GLfloat)(i % (NB_MASSES-1));
@@ -1214,7 +1215,7 @@ void render_scene() {
 	glViewport(0,0,512,512);
 	
 	// swap de texture entre la texture des positions courantes
-	// et celle des positions antérieures
+	// et celle des positions antÔøΩrieures
 	if( previousTexturePosition == POSITION_1_TEXTURE ) {
 		previousTexturePosition = POSITION_2_TEXTURE;
 		currentTexturePosition = POSITION_3_TEXTURE;
@@ -1232,7 +1233,7 @@ void render_scene() {
 	}
 	
 	//   /////////////////////////////////////////////////////////
-	// repassage de la texture de raideur et élongation pour modification des caractéristiques des ressorts
+	// repassage de la texture de raideur et ÔøΩlongation pour modification des caractÔøΩristiques des ressorts
 	//   /////////////////////////////////////////////////////////
 			for( int i = 0 ; i < NB_EDGES ; i++ ) {
 				dataFloatEdge[ i * 4 + 2 ] = raideur[i];
@@ -1282,17 +1283,17 @@ void render_scene() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 	
 	
-	// toutes les transformations suivantes s´appliquent au modèle de vue 
+	// toutes les transformations suivantes sÔøΩappliquent au modÔøΩle de vue 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity(); // loads new identity
 	
 	cgGLEnableProfile(cgVertexProfile);
 	cgGLEnableProfile(cgFragmentProfile);
-	// forces sur une arête
+	// forces sur une arÔøΩte
 	cgGLBindProgram(cgQuadVertexProgram);
 	cgGLBindProgram(cgForceFragmentProgram);
 	
-	// lie les paramètres uniformes au programme de vertex
+	// lie les paramÔøΩtres uniformes au programme de vertex
 	cgGLSetStateMatrixParameter(cgGetNamedParameter(cgQuadVertexProgram, 
 													"ModelViewProj"),
 								CG_GL_MODELVIEW_PROJECTION_MATRIX,
@@ -1302,7 +1303,7 @@ void render_scene() {
 								CG_GL_MODELVIEW_MATRIX,
 								CG_GL_MATRIX_IDENTITY);
 	
-	// fait le lien entre les param∂tres de contr˙le uniform⁄ment pris par CG 
+	// fait le lien entre les paramÔøΩtres de contrÔøΩle uniformÔøΩment pris par CG 
 	cgGLSetParameter1f(KplusFragmentShaderParam, Kplus);
 	cgGLSetParameter1f(LinitFragmentShaderParam, Linit);
 	cgGLSetParameter1f(AmortFragmentShaderParam, Amort);
@@ -1314,7 +1315,7 @@ void render_scene() {
 	// dessine le quad pour le calcul des forces
 	glPushMatrix();
 	/////////////////////////////////////////////////////////
-	// texture des arètes et des masses
+	// texture des arÔøΩtes et des masses
 	cgGLSetTextureParameter( edge_Index_K_L0_ForceFragmentProgram, 
 							g_Texture[EDGE_TEXTURE] );
 	cgGLEnableTextureParameter( edge_Index_K_L0_ForceFragmentProgram );
@@ -1325,7 +1326,7 @@ void render_scene() {
 	
 	glCallList( My_QuadRECT2D );
 	
-	// désactivation des textures
+	// dÔøΩsactivation des textures
 	cgGLDisableTextureParameter(edge_Index_K_L0_ForceFragmentProgram);
 	cgGLDisableTextureParameter(mass_Position_ForceFragmentProgram);
 	
@@ -1384,7 +1385,7 @@ void render_scene() {
 	// clears the buffer bits
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 	
-	// toutes les transformations suivantes s´appliquent au modèle de vue 
+	// toutes les transformations suivantes sÔøΩappliquent au modÔøΩle de vue 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity(); // loads new identity
 	
@@ -1409,7 +1410,7 @@ void render_scene() {
 	cgGLBindProgram(cgVertexLeftForcesProgram);
 	cgGLBindProgram(cgFragmentLeftCumulForcesProgram);
 	
-	// lie les paramètres uniformes au programme de vertex
+	// lie les paramÔøΩtres uniformes au programme de vertex
 	cgGLSetStateMatrixParameter(cgGetNamedParameter(cgVertexLeftForcesProgram, 
 													"ModelViewProj"),
 								CG_GL_MODELVIEW_PROJECTION_MATRIX,
@@ -1419,7 +1420,7 @@ void render_scene() {
 								CG_GL_MODELVIEW_MATRIX,
 								CG_GL_MATRIX_IDENTITY);
 	
-	// texture des arètes et des masses
+	// texture des arÔøΩtes et des masses
 	cgGLSetTextureParameter( edge_Index_K_L0_LeftForcesVertexShaderParam, 
 							g_Texture[EDGE_TEXTURE] );
 	cgGLEnableTextureParameter( edge_Index_K_L0_LeftForcesVertexShaderParam );
@@ -1429,7 +1430,7 @@ void render_scene() {
 	
 	glCallList( My_Points );
 	
-	// désactivation des textures
+	// dÔøΩsactivation des textures
 	cgGLDisableTextureParameter(edge_Index_K_L0_LeftForcesVertexShaderParam);
 	cgGLDisableTextureParameter(edge_Force_LeftFragmentShaderParam);
 	
@@ -1444,7 +1445,7 @@ void render_scene() {
 	cgGLBindProgram(cgVertexRightForcesProgram);
 	cgGLBindProgram(cgFragmentRightCumulForcesProgram);
 	
-	// lie les paramètres uniformes au programme de vertex
+	// lie les paramÔøΩtres uniformes au programme de vertex
 	cgGLSetStateMatrixParameter( cgGetNamedParameter(cgVertexRightForcesProgram, "ModelViewProj"),
 								CG_GL_MODELVIEW_PROJECTION_MATRIX,
 								CG_GL_MATRIX_IDENTITY );
@@ -1452,7 +1453,7 @@ void render_scene() {
 								CG_GL_MODELVIEW_MATRIX,
 								CG_GL_MATRIX_IDENTITY );
 	
-	// texture des arètes et des masses
+	// texture des arÔøΩtes et des masses
 	cgGLSetTextureParameter( edge_Index_K_L0_RightForcesVertexShaderParam, 
 							g_Texture[EDGE_TEXTURE] );
 	cgGLEnableTextureParameter( edge_Index_K_L0_RightForcesVertexShaderParam );
@@ -1462,7 +1463,7 @@ void render_scene() {
 	
 	glCallList( My_Points );
 	
-	// désactivation des textures
+	// dÔøΩsactivation des textures
 	cgGLDisableTextureParameter(edge_Index_K_L0_RightForcesVertexShaderParam);
 	cgGLDisableTextureParameter(edge_Force_RightFragmentShaderParam);
 	
@@ -1507,7 +1508,7 @@ void render_scene() {
 	// clears the buffer bits
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 	
-	// toutes les transformations suivantes s´appliquent au modèle de vue 
+	// toutes les transformations suivantes sÔøΩappliquent au modÔøΩle de vue 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity(); // loads new identity
 	
@@ -1523,7 +1524,7 @@ void render_scene() {
 	cgGLBindProgram(cgPositionsFragmentProgram);
 	
 	glPushMatrix();
-	// lie les paramètres uniformes au programme de vertex
+	// lie les paramÔøΩtres uniformes au programme de vertex
 	cgGLSetStateMatrixParameter(cgGetNamedParameter(cgQuadVertexProgram, "ModelViewProj"),
 								CG_GL_MODELVIEW_PROJECTION_MATRIX,
 								CG_GL_MATRIX_IDENTITY);
@@ -1552,7 +1553,7 @@ void render_scene() {
 	
 		
 		
-	// désactivation des textures
+	// dÔøΩsactivation des textures
 	cgGLDisableTextureParameter(mass_PrevPos_PositionsFragmentShaderParam);
 	cgGLDisableTextureParameter(mass_CurrPos_PositionsFragmentShaderParam);
 	cgGLDisableTextureParameter(mass_Forces_PositionsFragmentShaderParam);
@@ -1631,7 +1632,7 @@ void render_scene() {
 	{
 		/////////////////////////////////////////////////////////
 		// pass 5: dessin
-		// TRACÉ DES PARTICULES
+		// TRACÔøΩ DES PARTICULES
 		/////////////////////////////////////////////////////////
 		// 
 		//glViewport(0,0,1440,900);
@@ -1646,7 +1647,7 @@ void render_scene() {
 		glLoadIdentity();
 		glFrustum( -0.02 * ratio , 0.02 * ratio , -0.02 , 0.02 , 0.04, 10.00 );
 		
-		// toutes les transformations suivantes s´appliquent au modèle de vue 
+		// toutes les transformations suivantes sÔøΩappliquent au modÔøΩle de vue 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		
@@ -1656,7 +1657,7 @@ void render_scene() {
 		//glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, white_transparent );
 		//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND); 
 		
-		// pas d'éclairement, c'est fait par les shaders
+		// pas d'ÔøΩclairement, c'est fait par les shaders
 		glDisable(GL_LIGHTING);
 		glEnable(GL_DEPTH_TEST);
 		
@@ -1664,7 +1665,7 @@ void render_scene() {
 		cgGLBindProgram(cgDessinVertexProgram);
 		cgGLBindProgram(cgDessinFragmentProgram);
 		
-		// lie les paramètres uniformes au programme de vertex
+		// lie les paramÔøΩtres uniformes au programme de vertex
 		cgGLSetStateMatrixParameter(cgGetNamedParameter(cgDessinVertexProgram, "ModelViewProj"),
 									CG_GL_MODELVIEW_PROJECTION_MATRIX,
 									CG_GL_MATRIX_IDENTITY);
@@ -1673,7 +1674,7 @@ void render_scene() {
 									CG_GL_MATRIX_IDENTITY);
 		
 		// dessine les particules et les liens en fonction des dessin
-		// calculées à l'étape précédente
+		// calculÔøΩes ÔøΩ l'ÔøΩtape prÔøΩcÔøΩdente
 		glPushMatrix();
 		// texture des massses et des forces
 		// previousTexturePosition contient les nouvelles positions des masses
@@ -1690,7 +1691,7 @@ void render_scene() {
 		
 		glCallList( My_Particles );
 		
-		// désactivation des textures
+		// dÔøΩsactivation des textures
 		cgGLDisableTextureParameter(mass_Positions_DessinVertexShaderParam);
 		cgGLDisableTextureParameter(decal_DessinFragmentShaderParam);
 		
