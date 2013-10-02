@@ -1,0 +1,46 @@
+/***********************************************************************
+File: TD5-force-FS.cg
+
+Rendu Graphique Avancé RGA
+Master Professionnel d'informatique
+Christian Jacquemin, Université Paris 11
+
+Copyright (C) 2004 University Paris 11 
+This file is provided without support, instruction, or implied
+warranty of any kind.  University Paris 11 makes no guarantee of its
+fitness for a particular purpose and is not liable under any
+circumstances for any damages or loss whatsoever arising from the use
+or inability to use this file or items derived from it.
+*************************************************************************/
+
+// Main shader.
+
+float4 main(
+           // obtained from Vertex Program
+		   float2 decal2DCoords    : TEXCOORD0,      // coord text 2D
+           float2 decalRECTCoords    : TEXCOORD1,      // coord text RECT 
+
+	   // passed by the C programm
+           uniform sampler2D   edge_Index_K_L0: TEXUNIT0, // text des ressorts
+		   uniform float tablemodif[50]
+	           
+	   ) : COLOR
+{
+    // recupere la raideur courante 
+    float4 tex_edge_Index_K_L0 = tex2D( edge_Index_K_L0 , decal2DCoords );
+
+	tex_edge_Index_K_L0.z +=1.0;
+	
+	// additionne la valeur du tableau ˆ la raideur stockŽe dans la texture
+	for (int indice = 0; indice < 50; indice ++){
+		//si l'indice dans le tableau correspond ˆ l'indice du ressort
+		float raideur_supp = tablemodif[indice];
+	
+		if (indice == (int)(decalRECTCoords.x + decalRECTCoords.y*512)){
+			//alors on rajoute les valeurs des raideurs et elongations supplŽmentaires ˆ notre ressort
+			tex_edge_Index_K_L0.z += raideur_supp;
+		}
+	}
+	return float4(tex_edge_Index_K_L0);
+	return float4(1.0, 1.0, 1.0, 1.0 );
+}

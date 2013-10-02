@@ -1,0 +1,41 @@
+/***********************************************************************
+File: TD5-positions-FS.cg
+
+Rendu Graphique Avancé RGA
+Master Professionnel d'informatique
+Christian Jacquemin, Université Paris 11
+
+Copyright (C) 2004 University Paris 11 
+This file is provided without support, instruction, or implied
+warranty of any kind.  University Paris 11 makes no guarantee of its
+fitness for a particular purpose and is not liable under any
+circumstances for any damages or loss whatsoever arising from the use
+or inability to use this file or items derived from it.
+*************************************************************************/
+
+// Main shader.
+
+float4 main(
+           // obtained from Vertex Program
+           float2 decal2DCoords    : TEXCOORD0,      // coord text 2D
+           float2 decalRECTCoords  : TEXCOORD1,      // coord text RECT
+
+	   // passed by the C programm 
+           uniform float       scale,         // echelle des deplacements
+           uniform samplerRECT   edge_forces: TEXUNIT3,   // text des forces sur les masses
+           uniform sampler2D   prev_mass_positions: TEXUNIT4, // text position des masses
+           uniform sampler2D   curr_mass_positions: TEXUNIT5 // text position des masses
+	   ) : COLOR
+{
+    // recupere les informations sur l'arête courante et
+    // calcule la force associée à cette arête
+    float4 edge_forces_4f = texRECT( edge_forces , decalRECTCoords );
+    float4 mass_Position_4f 
+            = float4( 2 * tex2D( curr_mass_positions , decal2DCoords ).xyz
+                      - tex2D( prev_mass_positions , decal2DCoords ).xyz 
+                      + edge_forces_4f.xyz / 1000.0 , 1.0 );
+
+    // retourne la nouvelle position
+    return mass_Position_4f;
+    //return float4(frac(decalRECTCoords.x/51.10),frac(decalRECTCoords.y/51.10),0,1);
+}

@@ -1,0 +1,59 @@
+/***********************************************************************
+File: TD5-force-FS.cg
+
+Rendu Graphique AvancÈ RGA
+Master Professionnel d'informatique
+Christian Jacquemin, UniversitÈ Paris 11
+
+Copyright (C) 2004 University Paris 11 
+This file is provided without support, instruction, or implied
+warranty of any kind.  University Paris 11 makes no guarantee of its
+fitness for a particular purpose and is not liable under any
+circumstances for any damages or loss whatsoever arising from the use
+or inability to use this file or items derived from it.
+*************************************************************************/
+
+// Main shader.
+
+float4 main(
+           // obtained from Vertex Program
+           float2 decal2DCoords    : TEXCOORD0,      // coord text 2D
+           float2 decalRECTCoords  : TEXCOORD1,      // coord text RECT
+
+	   // passed by the C programm
+           uniform sampler2D   edge_Index_K_L0: TEXUNIT0, // text des ressorts
+		   uniform float Kplus,						// raideur supplémentaire rajoutée à l'ensemble des ressorts
+		   uniform float Linit,						//longueure initiale de l'ensemble des ressorts
+		   uniform float Amort,						//amortissement pour l'ensemble des ressort (arête le suystème)
+		   uniform float MassePlus,					//ajout de poids dans les masses du système
+	           
+              // indices, raideur et long intiale
+           uniform sampler2D   mass_Position: TEXUNIT1   // position des masses
+	   ) : COLOR
+{
+    // recupere les informations sur l'arÍte courante et
+    // calcule la force associÈe ‡ cette arÍte
+
+    // recupere l'indice des masses gauche et droite associÈes 
+    // a l'arete courante
+    float4 tex_edge_Index_K_L0 = tex2D( edge_Index_K_L0 , decal2DCoords );
+
+    // recupere la position de la masse de gauche 
+    // (coord rectangulaires donc entieres sur les pixels)
+    float4 positionsATexture 
+            = tex2D( mass_Position , float2( tex_edge_Index_K_L0.x/511.0 , 0.0 ) );
+    // recupere la position de la masse de droite 
+    float4 positionsBTexture 
+            = tex2D( mass_Position , float2( tex_edge_Index_K_L0.y/511.0 , 0.0 ) );
+
+    // calcule la force ‡ partir des positions des masses
+    // extremes, de la raideur du ressort et de sa longueur initiale
+    float3 AB = positionsBTexture.xyz - positionsATexture.xyz;
+    float norm = dot( AB , AB );
+    float3 force = (((tex_edge_Index_K_L0.z + Kplus) * (norm - tex_edge_Index_K_L0.w - Linit) * AB) * Amort);
+    if( norm != 0 ) {
+       force /= norm;
+    }
+
+	return float4(  force , 1.0);
+}

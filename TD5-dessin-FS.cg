@@ -1,0 +1,32 @@
+/***********************************************************************
+File: TD5-dessin-FS.cg
+
+Rendu Graphique Avancé RGA
+Master Professionnel d'informatique
+Christian Jacquemin, Université Paris 11
+
+Copyright (C) 2004 University Paris 11 
+This file is provided without support, instruction, or implied
+warranty of any kind.  University Paris 11 makes no guarantee of its
+fitness for a particular purpose and is not liable under any
+circumstances for any damages or loss whatsoever arising from the use
+or inability to use this file or items derived from it.
+*************************************************************************/
+
+// Main shader.
+
+float4 main(
+           // obtained from Vertex Program
+           float2 decalCoords  : TEXCOORD0,          // coord text
+
+	   // passed by the C programm 
+           uniform samplerRECT   decal_particules: TEXUNIT1       // mass texture
+	   ) : COLOR
+{
+    // recupere les informations sur l'arête courante et
+    // calcule la force associée à cette arête
+    float4 mass_Color_4f = texRECT( decal_particules , decalCoords );
+
+    return mass_Color_4f;
+    // return float4(0,0,1,1);
+}

@@ -1,0 +1,56 @@
+/***********************************************************************
+File: TD5-forces-gauche-VP.cg
+
+Rendu Graphique Avancé RGA
+Master Professionnel d'informatique
+Christian Jacquemin, Université Paris 11
+
+Copyright (C) 2004 University Paris 11 
+This file is provided without support, instruction, or implied
+warranty of any kind.  University Paris 11 makes no guarantee of its
+fitness for a particular purpose and is not liable under any
+circumstances for any damages or loss whatsoever arising from the use
+or inability to use this file or items derived from it.
+*************************************************************************/
+
+void main(float4 position      : POSITION,     // espace objet
+          float2 texcoords     : TEXCOORD0,
+
+          uniform float4x4 ModelViewProj,      // esp objet -> esp clipping
+          uniform float4x4 ModelView,          // esp objet -> esp de l'observateur
+          uniform float top,                   // frustum size
+          uniform sampler2D  edge_Index_K_L0: TEXUNIT0, // text des ressorts
+                         // indices, raideur et long intiale
+
+          out float4 HPosition    : POSITION,
+          out float2 decalCoords  : TEXCOORD0
+	  )
+{
+    // rang de l'arete courante (celle correspondant au point 
+    // au point associé au vertex courant)
+    float index = position.x;
+
+    // recupere le pixel de texture contenant
+    // l'indice des masses aux deux extremites de l'arete
+    // index = indice de l'arete
+    float4 edge_Index_K_L0_4f = tex2D( edge_Index_K_L0 , 
+                                       float2( index/511.0, 0 ) );
+
+    // positionne le point courant sur la position de la masse gauche
+    // dans la texture de cumul des forces par masse
+    position.x = -0.998 + edge_Index_K_L0_4f.x / 256.0;
+    position.y = -0.998;
+    // la position en z est faite en sorte que les points
+    // se recouvrent pour que le blend puisse opérer
+    // la hauteur d'un point est l'indice de l'arête /255
+    position.z = index/511.0;
+    position.w = 1.0;
+
+    // calcul de la position en coordonnées homogènes
+    // (dans le cube canonique: l'espace de clipping) pour le rasteriseur
+    HPosition = mul(ModelViewProj, position );
+
+    // passe l'indice de l'arete courante dans les coordonnées de texture
+    // pour la recuperation de la force dans le shader de fragment
+    decalCoords = float2( index , 0 );
+}

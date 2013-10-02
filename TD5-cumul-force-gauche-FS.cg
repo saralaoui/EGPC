@@ -1,0 +1,40 @@
+/***********************************************************************
+File: TD5-cumul-force-FS.cg
+
+Rendu Graphique Avancé RGA
+Master Professionnel d'informatique
+Christian Jacquemin, Université Paris 11
+
+Copyright (C) 2004 University Paris 11 
+This file is provided without support, instruction, or implied
+warranty of any kind.  University Paris 11 makes no guarantee of its
+fitness for a particular purpose and is not liable under any
+circumstances for any damages or loss whatsoever arising from the use
+or inability to use this file or items derived from it.
+*************************************************************************/
+
+// Main shader.
+
+float4 main(
+           // obtained from Vertex Program
+           float2 decalCoords  : TEXCOORD0,            // texture coords from VP
+
+           uniform samplerRECT  edge_forces: TEXUNIT1  // forces aux ressorts
+
+	   // passed by the C programm
+	   ) : COLOR
+{
+    // recupere la force calculée dans la texture de force
+    // à la premiere passe au moyen des coordonnées de l'arete
+    // fournies au programme de vertex et transmises
+    // la force est mise en positif pour la masse de gauche
+    return float4( texRECT( edge_forces , decalCoords ).xyz , 1.0 );
+
+    //float4 f=float4(0,0,0,1);
+    //if( texRECT( edge_forces , decalCoords ).x != 0 
+    //    || texRECT( edge_forces , decalCoords ).y != 0
+    //    || texRECT( edge_forces , decalCoords ).z != 0 ) {
+    // f=float4(1,0,0,1);
+    //}
+    //return f;
+}
